@@ -33,6 +33,11 @@ def read(conn, ip_port):
         if data:
             data_str = data.upper()
             logging.info(f'echoing {repr(data_str)} from {conn}')
+            d = data_str.strip().lower()
+            if d == b'exit':
+                sel.unregister(conn)
+                conn.close()
+                return
             conn.send(data_str)  # Hope it won't block
         else:
             logging.info(f'closing 2 {conn}')
